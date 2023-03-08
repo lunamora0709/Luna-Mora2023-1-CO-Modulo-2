@@ -8,6 +8,7 @@ from dino_runner.components.menu import Menu
 
 class Game:
     GAME_SPEED = 20
+    
     def __init__(self):
         pygame.init()
         pygame.display.set_caption(TITLE)
@@ -24,6 +25,7 @@ class Game:
         self.running = False
         self.score = 0
         self.death_count = 0
+        self.hiscore = 0
 
     def excecute(self):
         self.running = True
@@ -66,6 +68,7 @@ class Game:
         self.player.draw(self.screen)
         self.obstacle_manager.draw(self.screen)
         self.draw_score()
+        self.draw_hiscore()
         pygame.display.update()
         #pygame.display.flip()
 
@@ -86,8 +89,18 @@ class Game:
         if self.death_count == 0:
          self.menu.draw(self.screen)
         else:
-            self.menu.update_message('new message')
+            
             self.menu.draw(self.screen)
+            if self.score > self.hiscore:
+               self.hiscore = self.score
+            cadena = 'Puntaje maximo: '
+            cadena += str(self.hiscore)
+            cadena += '         Puntaje obtenido: '
+            cadena += str(self.score)
+            
+            cadena += '         Muertes: '
+            cadena += str(self.death_count)
+            self.menu.update_message (cadena)
 
         self.screen.blit(ICON,(half_screen_width - 50,half_screen_heigth - 140))
 
@@ -103,7 +116,15 @@ class Game:
         font = pygame.font.Font(FONT_STYLE, 30)
         text = font.render(f'score:{self.score}',True,(0, 0, 0))
         text_rect = text.get_rect()
-        text_rect.center = (1000, 50)
+        text_rect.center = (1000,100)
         self.screen.blit(text,text_rect)
+
+    def draw_hiscore(self):
+        font = pygame.font.Font(FONT_STYLE, 30)
+        text = font.render(f'highscore:{self.hiscore}',True,(0, 0, 0))
+        text_rect = text.get_rect()
+        text_rect.center = (1000,50)
+        self.screen.blit(text,text_rect)
+
 
 
